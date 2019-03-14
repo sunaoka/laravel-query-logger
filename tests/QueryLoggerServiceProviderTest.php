@@ -28,7 +28,6 @@ class QueryLoggerServiceProviderTest extends TestCase
         \Log::listen(function ($log) {
             /** @var \Illuminate\Log\Events\MessageLogged $log */
             $this->assertSame('debug', $log->level);
-            dump($log->message);
             $this->assertRegExp("/[[0-9.]ms] select '1';/D", $log->message);
         });
 
