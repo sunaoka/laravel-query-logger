@@ -15,7 +15,7 @@ class QueryLoggerServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        app('db')->listen(function(QueryExecuted $query) {
+        $this->app['db']->listen(function(QueryExecuted $query) {
             $bindings = $query->connection->prepareBindings($query->bindings);
             $args = array_map([$query->connection->getPdo(), 'quote'], $bindings);
             $sql = str_replace(['%', '?'], ['%%', '%s'], $query->sql);
