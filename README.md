@@ -2,6 +2,7 @@
 
 [![Latest Stable Version](https://poser.pugx.org/sunaoka/laravel-query-logger/v/stable)](https://packagist.org/packages/sunaoka/laravel-query-logger)
 [![License](https://poser.pugx.org/sunaoka/laravel-query-logger/license)](https://packagist.org/packages/sunaoka/laravel-query-logger)
+[![PHP from Packagist](https://img.shields.io/packagist/php-v/sunaoka/laravel-query-logger)](composer.json)
 [![Build Status](https://travis-ci.org/sunaoka/laravel-query-logger.svg?branch=develop)](https://travis-ci.org/sunaoka/laravel-query-logger)
 [![codecov](https://codecov.io/gh/sunaoka/laravel-query-logger/branch/develop/graph/badge.svg)](https://codecov.io/gh/sunaoka/laravel-query-logger)
 
