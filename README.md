@@ -1,9 +1,9 @@
-# Query logger for Laravel 5, 6 and 7
+# Query logger for Laravel 5, 6, 7 and 8
 
 [![Latest Stable Version](https://poser.pugx.org/sunaoka/laravel-query-logger/v/stable)](https://packagist.org/packages/sunaoka/laravel-query-logger)
 [![License](https://poser.pugx.org/sunaoka/laravel-query-logger/license)](https://packagist.org/packages/sunaoka/laravel-query-logger)
 [![PHP from Packagist](https://img.shields.io/packagist/php-v/sunaoka/laravel-query-logger)](composer.json)
-[![Laravel](https://img.shields.io/badge/laravel-5.x%20%7C%206.x%20%7C%207.x-red)](https://laravel.com/)
+[![Laravel](https://img.shields.io/badge/laravel-5.x%20%7C%206.x%20%7C%207.x%20%7C%208.x-red)](https://laravel.com/)
 [![Build Status](https://travis-ci.org/sunaoka/laravel-query-logger.svg?branch=develop)](https://travis-ci.org/sunaoka/laravel-query-logger)
 [![codecov](https://codecov.io/gh/sunaoka/laravel-query-logger/branch/develop/graph/badge.svg)](https://codecov.io/gh/sunaoka/laravel-query-logger)
 

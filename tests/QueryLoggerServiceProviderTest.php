@@ -3,6 +3,7 @@
 namespace Sunaoka\LaravelQueryLogger\Tests;
 
 use Orchestra\Testbench\TestCase;
+use PHPUnit\Runner\Version;
 use Sunaoka\LaravelQueryLogger\QueryLoggerServiceProvider;
 
 class QueryLoggerServiceProviderTest extends TestCase
@@ -28,7 +29,11 @@ class QueryLoggerServiceProviderTest extends TestCase
         \Log::listen(function ($log) {
             /** @var \Illuminate\Log\Events\MessageLogged $log */
             $this->assertSame('debug', $log->level);
-            $this->assertRegExp("/[[0-9.]ms] select '1';/D", $log->message);
+            if (version_compare(Version::id(), '9.1.0', '<')) {
+                $this->assertRegExp("/[[0-9.]ms] select '1';/D", $log->message);
+            } else {
+                $this->assertMatchesRegularExpression("/[[0-9.]ms] select '1';/D", $log->message);
+            }
         });
 
         \DB::select('select ?', [1]);
