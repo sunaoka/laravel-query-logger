@@ -24,7 +24,7 @@ class QueryLoggerServiceProviderTest extends TestCase
         ]);
     }
 
-    public function testRegister()
+    public function testQueryLog()
     {
         \Log::listen(function ($log) {
             /** @var \Illuminate\Log\Events\MessageLogged $log */
@@ -37,5 +37,42 @@ class QueryLoggerServiceProviderTest extends TestCase
         });
 
         \DB::select('select ?', [1]);
+    }
+
+    public function testTransactionBeginning()
+    {
+        \Log::listen(function ($log) {
+            /** @var \Illuminate\Log\Events\MessageLogged $log */
+            $this->assertSame('debug', $log->level);
+            $this->assertSame('BEGIN;', $log->message);
+        });
+
+        \DB::beginTransaction();
+    }
+
+    public function testTransactionCommitted()
+    {
+        \DB::beginTransaction();
+
+        \Log::listen(function ($log) {
+            /** @var \Illuminate\Log\Events\MessageLogged $log */
+            $this->assertSame('debug', $log->level);
+            $this->assertSame('COMMIT;', $log->message);
+        });
+
+        \DB::commit();
+    }
+
+    public function testTransactionRolledBack()
+    {
+        \DB::beginTransaction();
+
+        \Log::listen(function ($log) {
+            /** @var \Illuminate\Log\Events\MessageLogged $log */
+            $this->assertSame('debug', $log->level);
+            $this->assertSame('ROLLBACK;', $log->message);
+        });
+
+        \DB::rollBack();
     }
 }
