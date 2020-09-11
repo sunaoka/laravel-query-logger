@@ -20,7 +20,13 @@ composer require --dev sunaoka/laravel-query-logger
 ```php
 <?php
 
-\App\User::whereEmail('example@example.com')->get();
+\DB::beginTransaction();
+\App\User::whereEmail('example@example.com')->update(['name' => 'example']);
+\DB::commit();
+
+\DB::beginTransaction();
+\App\User::whereEmail('example@example.com')->update(['name' => 'example']);
+\DB::rollBack();
 ```
 
 ```bash
@@ -28,5 +34,11 @@ tail -F storage/logs/laravel.log
 ```
 
 ```bash
-[2019-02-13 01:57:40] local.DEBUG: [50.12ms] select * from "users" where "email" = 'example@example.com';  
+[2020-09-11 01:08:37] local.DEBUG: BEGIN;  
+[2020-09-11 01:08:37] local.DEBUG: [0.31ms] update "users" set "name" = 'example' where "email" = 'example@example.com';  
+[2020-09-11 01:08:37] local.DEBUG: COMMIT;  
+
+[2020-09-11 01:08:37] local.DEBUG: BEGIN;  
+[2020-09-11 01:08:37] local.DEBUG: [0.12ms] update "users" set "name" = 'example' where "email" = 'example@example.com';  
+[2020-09-11 01:08:37] local.DEBUG: ROLLBACK;  
 ```
