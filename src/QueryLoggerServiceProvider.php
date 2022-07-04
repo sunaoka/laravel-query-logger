@@ -20,7 +20,18 @@ class QueryLoggerServiceProvider extends ServiceProvider
     {
         $this->app['db']->listen(function(QueryExecuted $query) {
             $bindings = $query->connection->prepareBindings($query->bindings);
-            $args = array_map([$query->connection->getPdo(), 'quote'], $bindings);
+
+            $args = [];
+            foreach ($bindings as $binding) {
+                if ($binding === null) {
+                    $args[] = 'NULL';
+                } elseif (is_float($binding) || is_int($binding)) {
+                    $args[] = $binding;
+                } else {
+                    $args[] = $query->connection->getPdo()->quote($binding);
+                }
+            }
+
             $sql = str_replace(['%', '?'], ['%%', '%s'], $query->sql);
 
             $logger = app(LoggerInterface::class);
