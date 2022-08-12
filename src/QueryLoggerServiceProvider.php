@@ -16,9 +16,9 @@ class QueryLoggerServiceProvider extends ServiceProvider
      *
      * @return void
      */
-    public function boot()
+    public function boot(LoggerInterface $logger)
     {
-        $this->app['db']->listen(function(QueryExecuted $query) {
+        $this->app['db']->listen(function(QueryExecuted $query) use ($logger) {
             $bindings = $query->connection->prepareBindings($query->bindings);
 
             $args = [];
@@ -34,22 +34,18 @@ class QueryLoggerServiceProvider extends ServiceProvider
 
             $sql = str_replace(['%', '?'], ['%%', '%s'], $query->sql);
 
-            $logger = app(LoggerInterface::class);
             $logger->debug(sprintf('[%sms] %s;', $query->time, vsprintf($sql, $args)));
         });
 
-        $this->app['events']->listen(TransactionBeginning::class, function(TransactionBeginning $event) {
-            $logger = app(LoggerInterface::class);
+        $this->app['events']->listen(TransactionBeginning::class, function(TransactionBeginning $event) use ($logger) {
             $logger->debug('BEGIN;');
         });
 
-        $this->app['events']->listen(TransactionCommitted::class, function(TransactionCommitted $event) {
-            $logger = app(LoggerInterface::class);
+        $this->app['events']->listen(TransactionCommitted::class, function(TransactionCommitted $event) use ($logger) {
             $logger->debug('COMMIT;');
         });
 
-        $this->app['events']->listen(TransactionRolledBack::class, function(TransactionRolledBack $event) {
-            $logger = app(LoggerInterface::class);
+        $this->app['events']->listen(TransactionRolledBack::class, function(TransactionRolledBack $event) use ($logger) {
             $logger->debug('ROLLBACK;');
         });
     }
