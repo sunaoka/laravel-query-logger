@@ -32,7 +32,7 @@ class QueryLoggerServiceProvider extends ServiceProvider
                 }
             }
 
-            $sql = str_replace(['%', '?'], ['%%', '%s'], $query->sql);
+            $sql = str_replace(['%', '?', '%s%s'], ['%%', '%s', '??'], $query->sql);
 
             $logger->debug(sprintf('[%sms] %s;', $query->time, vsprintf($sql, $args)));
         });
