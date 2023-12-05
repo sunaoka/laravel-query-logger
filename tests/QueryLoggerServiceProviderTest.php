@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Sunaoka\LaravelQueryLogger\Tests;
 
 use Illuminate\Log\Events\MessageLogged;
@@ -54,7 +56,7 @@ class QueryLoggerServiceProviderTest extends TestCase
         Log::listen(function ($log) {
             /** @var MessageLogged $log */
             $this->assertSame('debug', $log->level);
-            $this->assertSame(1, preg_match("/[[\d.]ms] select NULL;/", $log->message));
+            $this->assertSame(1, preg_match("/[[\d.]ms] select null;/", $log->message));
         });
 
         DB::select('select ?', [null]);
