@@ -51,7 +51,7 @@ class QueryLoggerServiceProvider extends ServiceProvider
                 );
 
             if ($event->time >= (float) $slowQueryMilliseconds) {
-                $logger->debug("[{$event->time}ms] ".$color->apply("{$sql};"." {$slowQueryMilliseconds}ms"));
+                $logger->debug("[{$event->time}ms] ".$color->apply("{$sql};"));
             }
         });
 
