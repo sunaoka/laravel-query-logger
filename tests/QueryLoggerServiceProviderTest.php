@@ -8,33 +8,14 @@ use Illuminate\Log\Events\MessageLogged;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
-use Orchestra\Testbench\TestCase;
-use Sunaoka\LaravelQueryLogger\QueryLoggerServiceProvider;
 
 class QueryLoggerServiceProviderTest extends TestCase
 {
-    protected function getPackageProviders($app): array
-    {
-        return [
-            QueryLoggerServiceProvider::class,
-        ];
-    }
-
-    protected function getEnvironmentSetUp($app): void
-    {
-        $app['config']->set('database.default', 'testbench');
-        $app['config']->set('database.connections.testbench', [
-            'driver'   => 'sqlite',
-            'database' => ':memory:',
-        ]);
-    }
-
     public function testQueryLogInt(): void
     {
-        Log::listen(function ($log) {
-            /** @var MessageLogged $log */
+        Log::listen(function (MessageLogged $log) {
             $this->assertSame('debug', $log->level);
-            $this->assertSame(1, preg_match("/[[\d.]ms] select 1;/", $log->message));
+            $this->assertMatchesRegularExpression("/[[\d.]ms] select 1;/", $log->message);
         });
 
         DB::select('select ?', [1]);
@@ -42,10 +23,9 @@ class QueryLoggerServiceProviderTest extends TestCase
 
     public function testQueryLogFloat(): void
     {
-        Log::listen(function ($log) {
-            /** @var MessageLogged $log */
+        Log::listen(function (MessageLogged $log) {
             $this->assertSame('debug', $log->level);
-            $this->assertSame(1, preg_match("/[[\d.]ms] select 1\.1;/", $log->message));
+            $this->assertMatchesRegularExpression("/[[\d.]ms] select 1\.1;/", $log->message);
         });
 
         DB::select('select ?', [1.1]);
@@ -53,10 +33,9 @@ class QueryLoggerServiceProviderTest extends TestCase
 
     public function testQueryLogNull(): void
     {
-        Log::listen(function ($log) {
-            /** @var MessageLogged $log */
+        Log::listen(function (MessageLogged $log) {
             $this->assertSame('debug', $log->level);
-            $this->assertSame(1, preg_match("/[[\d.]ms] select null;/", $log->message));
+            $this->assertMatchesRegularExpression("/[[\d.]ms] select null;/", $log->message);
         });
 
         DB::select('select ?', [null]);
@@ -64,10 +43,9 @@ class QueryLoggerServiceProviderTest extends TestCase
 
     public function testQueryLogString(): void
     {
-        Log::listen(function ($log) {
-            /** @var MessageLogged $log */
+        Log::listen(function (MessageLogged $log) {
             $this->assertSame('debug', $log->level);
-            $this->assertSame(1, preg_match("/[[\d.]ms] select 'string';/", $log->message));
+            $this->assertMatchesRegularExpression("/[[\d.]ms] select 'string';/", $log->message);
         });
 
         DB::select('select ?', ['string']);
@@ -75,10 +53,9 @@ class QueryLoggerServiceProviderTest extends TestCase
 
     public function testQueryLogBool(): void
     {
-        Log::listen(function ($log) {
-            /** @var MessageLogged $log */
+        Log::listen(function (MessageLogged $log) {
             $this->assertSame('debug', $log->level);
-            $this->assertSame(1, preg_match("/[[\d.]ms] select 1;/", $log->message));
+            $this->assertMatchesRegularExpression("/[[\d.]ms] select 1;/", $log->message);
         });
 
         DB::select('select ?', [true]);
@@ -86,19 +63,20 @@ class QueryLoggerServiceProviderTest extends TestCase
 
     public function testQueryLogDateTimeInterface(): void
     {
-        Log::listen(function ($log) {
-            /** @var MessageLogged $log */
+        Log::listen(function (MessageLogged $log) {
             $this->assertSame('debug', $log->level);
-            $this->assertSame(1, preg_match("/[[\d.]ms] select '1970-01-01 00:00:00';/", $log->message));
+            $this->assertMatchesRegularExpression("/[[\d.]ms] select '1970-01-01 00:00:00';/", $log->message);
         });
 
         DB::select('select ?', [Carbon::parse('1970-01-01 00:00:00')]);
     }
 
+    /**
+     * @throws \Throwable
+     */
     public function testTransactionBeginning(): void
     {
-        Log::listen(function ($log) {
-            /** @var MessageLogged $log */
+        Log::listen(function (MessageLogged $log) {
             $this->assertSame('debug', $log->level);
             $this->assertSame('BEGIN;', $log->message);
         });
@@ -106,12 +84,14 @@ class QueryLoggerServiceProviderTest extends TestCase
         DB::beginTransaction();
     }
 
+    /**
+     * @throws \Throwable
+     */
     public function testTransactionCommitted(): void
     {
         DB::beginTransaction();
 
-        Log::listen(function ($log) {
-            /** @var MessageLogged $log */
+        Log::listen(function (MessageLogged $log) {
             $this->assertSame('debug', $log->level);
             $this->assertSame('COMMIT;', $log->message);
         });
@@ -119,12 +99,14 @@ class QueryLoggerServiceProviderTest extends TestCase
         DB::commit();
     }
 
+    /**
+     * @throws \Throwable
+     */
     public function testTransactionRolledBack(): void
     {
         DB::beginTransaction();
 
-        Log::listen(function ($log) {
-            /** @var MessageLogged $log */
+        Log::listen(function (MessageLogged $log) {
             $this->assertSame('debug', $log->level);
             $this->assertSame('ROLLBACK;', $log->message);
         });

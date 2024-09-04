@@ -11,6 +11,19 @@
 
 ## Installation
 
+## Support Policy
+
+| Version (*1) | Laravel (*2) | PHP (*3)  |
+|--------------|--------------|-----------|
+| [1][v1.x]    | 5.7 - 11     | 7.1 - 8.3 |
+| 2            | 10 - 11      | 8.1 - 8.3 |
+
+(*1) Supported Query logger version
+
+(*2) Supported Laravel versions
+
+(*3) Supported PHP versions
+
 ```bash
 composer require --dev sunaoka/laravel-query-logger
 ```
@@ -42,3 +55,5 @@ tail -F storage/logs/laravel.log
 [2020-09-11 01:08:37] local.DEBUG: [0.12ms] update "users" set "name" = 'example' where "email" = 'example@example.com';  
 [2020-09-11 01:08:37] local.DEBUG: ROLLBACK;  
 ```
+
+[v1.x]: https://github.com/sunaoka/laravel-query-logger/tree/v1.x
