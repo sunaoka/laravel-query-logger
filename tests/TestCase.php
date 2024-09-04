@@ -35,9 +35,14 @@ class TestCase extends \Orchestra\Testbench\TestCase
                 'driver' => 'sqlite',
                 'database' => ':memory:',
             ]);
-            $config->set('query-logger.color', [
-                'foreground' => '',
-                'background' => '',
+            $config->set('query-logger', [
+                'color' => [
+                    'foreground' => '',
+                    'background' => '',
+                ],
+                'slow_query' => [
+                    'milliseconds' => 0,
+                ],
             ]);
         });
     }

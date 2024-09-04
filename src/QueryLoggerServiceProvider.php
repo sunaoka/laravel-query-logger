@@ -33,11 +33,16 @@ class QueryLoggerServiceProvider extends ServiceProvider
         }
 
         $color = new Color(
-            $config->get('query-logger.color.foreground', ''),  // @phpstan-ignore argument.type
-            $config->get('query-logger.color.background', ''),  // @phpstan-ignore argument.type
+            // @phpstan-ignore cast.string
+            (string) $config->get('query-logger.color.foreground', ''),
+            // @phpstan-ignore cast.string
+            (string) $config->get('query-logger.color.background', ''),
         );
 
-        $events->listen(QueryExecuted::class, function (QueryExecuted $event) use ($logger, $color) {
+        // @phpstan-ignore cast.int
+        $slowQueryMilliseconds = (int) $config->get('query-logger.slow_query.milliseconds', 0);
+
+        $events->listen(QueryExecuted::class, function (QueryExecuted $event) use ($logger, $color, $slowQueryMilliseconds) {
             $sql = $event->connection
                 ->getQueryGrammar()
                 ->substituteBindingsIntoRawSql(
@@ -45,7 +50,9 @@ class QueryLoggerServiceProvider extends ServiceProvider
                     bindings: $event->connection->prepareBindings($event->bindings),
                 );
 
-            $logger->debug("[{$event->time}ms] ".$color->apply("{$sql};"));
+            if ($event->time >= (float) $slowQueryMilliseconds) {
+                $logger->debug("[{$event->time}ms] ".$color->apply("{$sql};"." {$slowQueryMilliseconds}ms"));
+            }
         });
 
         $events->listen(TransactionBeginning::class, function (TransactionBeginning $event) use ($logger, $color) {
