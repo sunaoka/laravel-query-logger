@@ -11,7 +11,7 @@ use Illuminate\Support\Facades\Log;
 
 class QueryLoggerServiceProviderTest extends TestCase
 {
-    public function testQueryLogInt(): void
+    public function test_query_log_int(): void
     {
         Log::listen(function (MessageLogged $log) {
             $this->assertSame('debug', $log->level);
@@ -21,7 +21,7 @@ class QueryLoggerServiceProviderTest extends TestCase
         DB::select('select ?', [1]);
     }
 
-    public function testQueryLogFloat(): void
+    public function test_query_log_float(): void
     {
         Log::listen(function (MessageLogged $log) {
             $this->assertSame('debug', $log->level);
@@ -31,7 +31,7 @@ class QueryLoggerServiceProviderTest extends TestCase
         DB::select('select ?', [1.1]);
     }
 
-    public function testQueryLogNull(): void
+    public function test_query_log_null(): void
     {
         Log::listen(function (MessageLogged $log) {
             $this->assertSame('debug', $log->level);
@@ -41,7 +41,7 @@ class QueryLoggerServiceProviderTest extends TestCase
         DB::select('select ?', [null]);
     }
 
-    public function testQueryLogString(): void
+    public function test_query_log_string(): void
     {
         Log::listen(function (MessageLogged $log) {
             $this->assertSame('debug', $log->level);
@@ -51,7 +51,7 @@ class QueryLoggerServiceProviderTest extends TestCase
         DB::select('select ?', ['string']);
     }
 
-    public function testQueryLogBool(): void
+    public function test_query_log_bool(): void
     {
         Log::listen(function (MessageLogged $log) {
             $this->assertSame('debug', $log->level);
@@ -61,7 +61,7 @@ class QueryLoggerServiceProviderTest extends TestCase
         DB::select('select ?', [true]);
     }
 
-    public function testQueryLogDateTimeInterface(): void
+    public function test_query_log_date_time_interface(): void
     {
         Log::listen(function (MessageLogged $log) {
             $this->assertSame('debug', $log->level);
@@ -74,7 +74,7 @@ class QueryLoggerServiceProviderTest extends TestCase
     /**
      * @throws \Throwable
      */
-    public function testTransactionBeginning(): void
+    public function test_transaction_beginning(): void
     {
         Log::listen(function (MessageLogged $log) {
             $this->assertSame('debug', $log->level);
@@ -87,7 +87,7 @@ class QueryLoggerServiceProviderTest extends TestCase
     /**
      * @throws \Throwable
      */
-    public function testTransactionCommitted(): void
+    public function test_transaction_committed(): void
     {
         DB::beginTransaction();
 
@@ -102,7 +102,7 @@ class QueryLoggerServiceProviderTest extends TestCase
     /**
      * @throws \Throwable
      */
-    public function testTransactionRolledBack(): void
+    public function test_transaction_rolled_back(): void
     {
         DB::beginTransaction();
 
