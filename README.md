@@ -1,4 +1,4 @@
-# Query logger for Laravel 5.8 to 11
+# Query logger for Laravel
 
 [![Latest Stable Version](https://poser.pugx.org/sunaoka/laravel-query-logger/v/stable)](https://packagist.org/packages/sunaoka/laravel-query-logger)
 [![License](https://poser.pugx.org/sunaoka/laravel-query-logger/license)](https://packagist.org/packages/sunaoka/laravel-query-logger)
