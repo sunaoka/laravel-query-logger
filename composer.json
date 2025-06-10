@@ -1,7 +1,7 @@
 {
     "name": "sunaoka/laravel-query-logger",
     "description": "Query logger for Laravel.",
-    "keywords": ["laravel", "database", "logger", "log"],
+    "keywords": ["laravel", "database", "logger", "log", "dev"],
     "type": "library",
     "license": "MIT",
     "authors": [
@@ -48,6 +48,6 @@
         "preferred-install": "dist",
         "sort-packages": true
     },
-    "minimum-stability": "dev",
+    "minimum-stability": "stable",
     "prefer-stable": true
 }
