@@ -43,6 +43,10 @@ class QueryLoggerServiceProvider extends ServiceProvider
         $slowQueryMilliseconds = (int) $config->get('query-logger.slow_query.milliseconds', 0);
 
         $events->listen(QueryExecuted::class, function (QueryExecuted $event) use ($logger, $color, $slowQueryMilliseconds) {
+            if ($event->time < (float) $slowQueryMilliseconds) {
+                return;  // @codeCoverageIgnore
+            }
+
             $sql = $event->connection
                 ->getQueryGrammar()
                 ->substituteBindingsIntoRawSql(
@@ -50,9 +54,7 @@ class QueryLoggerServiceProvider extends ServiceProvider
                     bindings: $event->connection->prepareBindings($event->bindings),
                 );
 
-            if ($event->time >= (float) $slowQueryMilliseconds) {
-                $logger->debug("[{$event->time}ms] ".$color->apply("{$sql};"));
-            }
+            $logger->debug("[{$event->time}ms] {$color->apply("{$sql};")}");
         });
 
         $events->listen(TransactionBeginning::class, function (TransactionBeginning $event) use ($logger, $color) {
