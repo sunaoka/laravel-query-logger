@@ -29,7 +29,8 @@ class TestCase extends \Orchestra\Testbench\TestCase
      */
     protected function defineEnvironment($app): void
     {
-        tap($app['config'], static function (Repository $config) {
+        tap($app['config'], static function ($config) {
+            /** @var Repository $config */
             $config->set('database.default', 'testbench');
             $config->set('database.connections.testbench', [
                 'driver' => 'sqlite',
