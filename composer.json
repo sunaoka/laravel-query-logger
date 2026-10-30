@@ -44,10 +44,10 @@
         }
     },
     "config": {
-        "audit": {
-            "ignore": [
-                "laravel/framework"
-            ]
+        "policy": {
+            "advisories": {
+                "block": false
+            }
         },
         "optimize-autoloader": true,
         "preferred-install": "dist",
